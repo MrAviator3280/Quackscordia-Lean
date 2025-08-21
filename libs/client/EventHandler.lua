@@ -1,6 +1,20 @@
 local enums = require('enums')
 local json = require('json')
 
+if not string.split then
+    function string.split(inputstr, sep)
+        if type(inputstr) ~= "string" or inputstr == "" then
+            return {}
+        end
+        sep = sep or "%s"
+        local t = {}
+        for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
+            table.insert(t, str)
+        end
+        return t
+    end
+end
+
 local channelType = assert(enums.channelType)
 local insert = table.insert
 local null = json.null
