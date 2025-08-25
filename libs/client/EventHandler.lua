@@ -359,7 +359,23 @@ function EventHandler.MESSAGE_CREATE(d, client)
     local split = string.split(d.content or "", " && ")
     for i, content in pairs(split) do
         d.content = content
-        client:emit('messageCreate', channel._messages:_insert(d))
+        local __msg = channel._messages:_insert(d)
+        client:emit('messageCreate', __msg)
+        do
+            local __limit = client._options and client._options.messageLimit
+            if __limit and __limit > 0 then
+                local __count = #channel._messages
+                if __count > __limit then
+                    local __arr = channel._messages:toArray()
+                    table.sort(__arr, function(a,b) return a._id < b._id end)
+                    local __toTrim = __count - __limit
+                    for __i = 1, __toTrim do
+                        local __old = __arr[__i]
+                        if __old and __old._id then channel._messages:_delete(__old._id) end
+                    end
+                end
+            end
+        end
 
         if i >= 3 then
             break
