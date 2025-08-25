@@ -8,3 +8,10 @@ This is a personal fork of [SinisterRectus/Discordia](https://github.com/Siniste
 A fork of [DuckySupport/Quackscordia](https://github.com/DuckySupport/Quackscordia)
 
 Less Memory Usage compared to Quackscordia (we hope)
+
+Message Cache Capping via:
+```lua
+local client = discordia.Client({
+    messageLimit = 100  -- cap cached messages per channel; off if nil/0/omitted
+})
+```
